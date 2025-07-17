@@ -89,5 +89,41 @@ namespace Calculator.Controllers
             return $"Deleted record with id:{id}";
         }
 
+
+
+        //For my forntend
+
+        [HttpPost("forntend/{op1}/{op2}/{symbol}")]
+        public decimal ForntEndResult(decimal op1, decimal op2, string symbol )
+        {
+            decimal result;
+
+            switch (symbol.ElementAt(0))
+            {
+                case '+':
+                    result = op1 + op2;
+                    break;
+                case '-':
+                    result = op1 - op2;
+                    break;
+                case '*':
+                    result = op1 * op2;
+                    break;
+                case '/':
+                    if (op2 == 0)
+                        return 0;
+                    result = op1/op2;
+                    break;
+                default:
+                    return 0;
+            }
+            Calci request = new() {Operand1=op1, Operand2=op2, Symbol= symbol.ElementAt(0), Result = result };
+            request.Result = result;
+            context.calculations.Add(request);
+            context.SaveChanges();
+
+            return result;
+        }
+
     }
 }
